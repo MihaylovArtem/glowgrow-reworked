@@ -4,8 +4,8 @@ using System.Collections;
 public class Bullet : MonoBehaviour
 {
 
-    public <> bulletType;
-    public <> speed;
+//    public <> bulletType;
+//    public <> speed;
 
     public void SetType(int newBulletType)
     {
