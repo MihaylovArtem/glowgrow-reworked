@@ -38,9 +38,14 @@ public class Bullet : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+		
+	}
+
+	public void setColorType(ColorType type) {
+		colorType = type;
 		sprite.color = expectedColor;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	

@@ -6,7 +6,10 @@ public class Player : MonoBehaviour {
 	const int bulletMaxCount = 20;
 
 	public delegate void PlayerDelegate();
-	public static event PlayerDelegate OnBulletCatch;
+	public static event PlayerDelegate OnRightBulletCatch;
+	public static event PlayerDelegate OnWrongBulletCatch;
+	public static event PlayerDelegate OnMaxBulletCountCatch;
+	public static event PlayerDelegate OnGameOver;
 
 	private ColorType currentColorType = ColorType.first;
 	private Color lastColor;
@@ -28,6 +31,8 @@ public class Player : MonoBehaviour {
 	private float increasePlayerSizeDelta;
 	private float increaseGlowSizeDelta;
 
+	private CircleCollider2D playerCollider;
+
 	private float colorChangeDuration = 0.2f;
 	private float colorChangeTimer = 0.0f;
 
@@ -41,8 +46,10 @@ public class Player : MonoBehaviour {
 	}
 
 	public void IncreaseSize(Bullet catchedBullet) {
+		//TODO: анимация
 		expectedSize += increasePlayerSizeDelta;
 		expectedGlowSize += increaseGlowSizeDelta;
+		playerCollider.radius *= expectedSize / (expectedSize - increasePlayerSizeDelta);
 
 		var outterLayer = Instantiate (outterLayerPrefab, gameObject.transform) as GameObject;
 		outterLayerStack.Push(outterLayer);
@@ -53,13 +60,22 @@ public class Player : MonoBehaviour {
 		outterLayer.transform.position = new Vector3 (0, 0, outterLayerStack.Count/100.0f);
 		outterLayer.transform.localScale = new Vector2 (expectedSize, expectedSize);
 		glowObject.transform.localScale = new Vector2 (expectedGlowSize, expectedGlowSize);
+
+		if (outterLayerStack.Count == bulletMaxCount) {
+			DestroyAllLayers();
+			OnMaxBulletCountCatch();
+		}
+
 	}
 
 	public void DecreaseSize() {
-
+		//TODO: анимация
 		if (outterLayerStack.Count == 0) {
 			DestroySelf();
 		} else {
+
+			playerCollider.radius /= (expectedSize / (expectedSize - increasePlayerSizeDelta));
+
 			expectedSize -= increasePlayerSizeDelta;
 			expectedGlowSize -= increaseGlowSizeDelta;
 
@@ -71,6 +87,23 @@ public class Player : MonoBehaviour {
 
 	}
 
+	public void DestroyAllLayers() {
+		//TODO: анимация
+
+		playerCollider.radius /= (expectedSize / (expectedSize - increasePlayerSizeDelta * outterLayerStack.Count));
+
+		expectedSize -= increasePlayerSizeDelta * outterLayerStack.Count;
+		expectedGlowSize -= increaseGlowSizeDelta * outterLayerStack.Count;
+
+
+		while (outterLayerStack.Count > 0) {
+			var lastLayer = outterLayerStack.Pop() as GameObject;
+			lastLayer.GetComponent<PlayerOutterLayer>().DestroySelf();
+		}
+
+		glowObject.transform.localScale = new Vector2(expectedGlowSize, expectedGlowSize);
+	}
+
 	public void DestroySelf() {
 
 	}
@@ -79,6 +112,8 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		glowSpriteRenderer.color = PalleteManager.getCurrentPallete().bulletFirstTypeColor;
+
+		playerCollider = gameObject.GetComponent<CircleCollider2D>();
 
 		expectedSize = 1;
 		expectedGlowSize = glowObject.transform.localScale.x;
@@ -113,9 +148,10 @@ public class Player : MonoBehaviour {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 			if (bullet.colorType == this.currentColorType) {
 				IncreaseSize (bullet);
-				OnBulletCatch ();
+				OnRightBulletCatch ();
 			} else {
 				DecreaseSize ();
+				OnWrongBulletCatch();
 			}
 			bullet.DestroySelf ();
 		}

@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 62f2c9b5f8fab2242a6e4eb0543961c5
-timeCreated: 1453638772
+timeCreated: 1480239436
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - outterLayerPrefab: {fileID: 1000013239805782, guid: 3b50a1ec8f5b044cc803ec6b02947c4a,
+      type: 2}
+  - glowObject: {instanceID: 0}
+  - glowSpriteRenderer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
