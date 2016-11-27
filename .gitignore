@@ -14,8 +14,12 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-Temp/ 
-Library/ 
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/Assets/AssetStoreTools*
 
 # ===================================== # 
 # Visual Studio / MonoDevelop generated # 
