@@ -57,6 +57,18 @@ public class Player : MonoBehaviour {
 
 	public void DecreaseSize() {
 
+		if (outterLayerStack.Count == 0) {
+			DestroySelf();
+		} else {
+			expectedSize -= increasePlayerSizeDelta;
+			expectedGlowSize -= increaseGlowSizeDelta;
+
+			var lastLayer = outterLayerStack.Pop () as GameObject;
+			lastLayer.GetComponent<PlayerOutterLayer>().DestroySelf();
+
+			glowObject.transform.localScale = new Vector2(expectedGlowSize, expectedGlowSize);
+		}
+
 	}
 
 	public void DestroySelf() {
@@ -79,6 +91,7 @@ public class Player : MonoBehaviour {
 	void Update () {
 		CheckInput();
 		HandleCurrentColor();
+
 	}
 
 	void CheckInput() {
@@ -96,7 +109,6 @@ public class Player : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		Debug.Log ("Collision");
 		if (other.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 			if (bullet.colorType == this.currentColorType) {

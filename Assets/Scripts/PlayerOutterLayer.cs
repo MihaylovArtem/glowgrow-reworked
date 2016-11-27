@@ -24,4 +24,8 @@ public class PlayerOutterLayer : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void DestroySelf () {
+		Destroy(gameObject);
+	}
 }
