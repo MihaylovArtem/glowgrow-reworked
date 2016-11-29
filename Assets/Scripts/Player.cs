@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 	public static event PlayerDelegate OnMaxBulletCountCatch;
 	public static event PlayerDelegate OnGameOver;
 	public static event PlayerDelegate OnSuperPower;
+	public static event PlayerDelegate OnSuperPowerBulletCatch;
 
 	private ColorType currentColorType = ColorType.first;
 	private Color lastColor;
@@ -114,6 +115,7 @@ public class Player : MonoBehaviour {
 		bulletsForPower = 0;
 		foreach (GameObject bullet in allBullets) {
 			bullet.GetComponent<Bullet>().DestroySelf();
+			OnSuperPowerBulletCatch ();
 		}
 	}
 
