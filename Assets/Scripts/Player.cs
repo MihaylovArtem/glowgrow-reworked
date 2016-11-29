@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
 	public static event PlayerDelegate OnWrongBulletCatch;
 	public static event PlayerDelegate OnMaxBulletCountCatch;
 	public static event PlayerDelegate OnGameOver;
+	public static event PlayerDelegate OnSuperPower;
 
 	private ColorType currentColorType = ColorType.first;
 	private Color lastColor;
@@ -35,6 +36,9 @@ public class Player : MonoBehaviour {
 
 	private float colorChangeDuration = 0.2f;
 	private float colorChangeTimer = 0.0f;
+
+	private int bulletsForPower = 0;
+	private const int maxBulletsForPower = 10;
 
 	public GameObject glowObject; //необходимо, чтобы каждый раз не искать в компонентах объекта glow компонент цвет;
 	public SpriteRenderer glowSpriteRenderer; //необходимо, чтобы каждый раз не искать в компонентах объекта glow компонент цвет;
@@ -104,9 +108,18 @@ public class Player : MonoBehaviour {
 		glowObject.transform.localScale = new Vector2(expectedGlowSize, expectedGlowSize);
 	}
 
-	public void DestroySelf() {
-
+	public void performSuperPower() {
+		GameObject[] allBullets = GameObject.FindGameObjectsWithTag("Bullet");
+		OnSuperPower();
+		bulletsForPower = 0;
+		foreach (GameObject bullet in allBullets) {
+			bullet.GetComponent<Bullet>().DestroySelf();
+		}
 	}
+
+	public void DestroySelf() {
+		
+ 	}
 
 
 	// Use this for initialization
@@ -126,7 +139,12 @@ public class Player : MonoBehaviour {
 	void Update () {
 		CheckInput();
 		HandleCurrentColor();
-
+		if (Input.GetKeyUp("space")) {
+			if (bulletsForPower == maxBulletsForPower) {
+				Debug.Log("Go!");
+				performSuperPower();
+			}
+		}
 	}
 
 	void CheckInput() {
@@ -146,12 +164,16 @@ public class Player : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
-			if (bullet.colorType == this.currentColorType) {
+			if (bullet.colorType == currentColorType) {
 				IncreaseSize (bullet);
 				OnRightBulletCatch ();
+				if (bulletsForPower < maxBulletsForPower) {
+					bulletsForPower++;
+				}
 			} else {
 				DecreaseSize ();
 				OnWrongBulletCatch();
+				bulletsForPower = 0;
 			}
 			bullet.DestroySelf ();
 		}
