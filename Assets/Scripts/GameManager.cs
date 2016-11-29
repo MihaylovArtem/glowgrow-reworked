@@ -5,7 +5,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 	public Player player;
 	//TODO: заменить на нормальный BulletPatternManager
-	public LinearBulletPattern linearPattern; 
+	public LinearBulletPattern pattern;
 	public Text scoreText;
 	public Text superPowerText;
 	public int currentScore = 0;
@@ -21,9 +21,9 @@ public class GameManager : MonoBehaviour {
 		Player.OnGameOver += PerformGameOver;
 		Player.OnSuperPower += PerformSuperPower;
 		Player.OnSuperPowerBulletCatch += IncreaseScore;
-		StartCoroutine(linearPattern.SpawnPattern());
+		StartCoroutine(pattern.SpawnPattern());
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
