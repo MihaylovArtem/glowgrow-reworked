@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
+	enum GameState {
+		Menu, Playing, Pause, GameOver
+	}
+
+	private GameState gameState = GameState.Menu;
+
 	public Player player;
 	//TODO: заменить на нормальный BulletPatternManager
 	public LinearBulletPattern pattern;
@@ -11,6 +18,8 @@ public class GameManager : MonoBehaviour {
 	public int currentScore = 0;
 	private int bulletsForPower = 0;
 	private const int maxBulletsForPower = 10;
+	public GameObject menuPanel;
+
 
 	// Use this for initialization
 	void Start() {
@@ -21,12 +30,12 @@ public class GameManager : MonoBehaviour {
 		Player.OnGameOver += PerformGameOver;
 		Player.OnSuperPower += PerformSuperPower;
 		Player.OnSuperPowerBulletCatch += IncreaseScore;
-		StartCoroutine(pattern.SpawnPattern());
 	}
 
 	// Update is called once per frame
 	void Update () {
-
+		CheckInput ();
+		UpdateUI ();
 	}
 
 	void IncreaseScore() {
@@ -61,5 +70,43 @@ public class GameManager : MonoBehaviour {
 		superPowerText.text = "Шаров для суперсилы " + bulletsForPower.ToString() + " / " + maxBulletsForPower.ToString();
 	}
 
+	void StartGame() {
+		gameState = GameState.Playing;
+		StartCoroutine(pattern.SpawnPattern());
+	}
+
+	void ToMainMenu() {
+		gameState = GameState.Menu;
+	}
+
+	void UpdateUI() {
+		if (gameState == GameState.Playing) {
+			if (menuPanel.transform.localScale.x < 7) {
+				menuPanel.transform.localScale *= 1.05f + (menuPanel.transform.localScale.x / 50);
+			}
+			if (menuPanel.transform.localScale.x > 7) {
+				menuPanel.transform.localScale = new Vector3 (7, 7, 7);
+			}
+		} else if (gameState == GameState.Menu) {
+			if (menuPanel.transform.localScale.x > 1) {
+				menuPanel.transform.localScale /= 1.05f + (menuPanel.transform.localScale.x / 50);
+			}
+			if (menuPanel.transform.localScale.x < 1) {
+				menuPanel.transform.localScale = new Vector3 (1, 1, 1);
+			}
+		}
+	}
+
+	void CheckInput() {
+		if (gameState == GameState.Playing) {
+			if (Input.GetKeyUp (KeyCode.DownArrow)) {
+				ToMainMenu();
+			}
+		} else if (gameState == GameState.Menu) {
+			if (Input.GetKeyUp(KeyCode.UpArrow)) {
+				StartGame ();
+			}
+		}
+	}
 
 }
