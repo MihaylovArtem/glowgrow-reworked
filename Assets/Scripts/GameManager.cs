@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
 	public Player player;
 	//TODO: заменить на нормальный BulletPatternManager
 	public LinearBulletPattern pattern;
+
+    private BulletPatternManager patternManager;
 	public Text scoreText;
 	public Text superPowerText;
 	public int currentScore = 0;
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour {
 		Player.OnGameOver += PerformGameOver;
 		Player.OnSuperPower += PerformSuperPower;
 		Player.OnSuperPowerBulletCatch += IncreaseScore;
+        patternManager = gameObject.GetComponent<BulletPatternManager>();
+        patternManager.SpawnRandomPattern();
 	}
 
 	// Update is called once per frame
