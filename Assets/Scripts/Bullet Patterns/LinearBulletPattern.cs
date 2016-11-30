@@ -21,8 +21,11 @@ public class LinearBulletPattern : BulletPattern {
 		sentBulletAmount = 0;
 
 		for (int i = 0; i < bulletAmount; i++) {
+			if (GameManager.gameState != GameManager.GameState.Playing) {
+				break;
+			}
 			SpawnSingleBullet();
-			nextColorType = (nextColorType == ColorType.first) ? ColorType.second : ColorType.first;
+			nextColorType = (sentBulletAmount % 3 == 1) ? ColorType.second : ColorType.first;
 			yield return new WaitForSeconds(0.40f);
 		}
 	}

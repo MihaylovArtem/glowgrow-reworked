@@ -76,18 +76,21 @@ public class Player : MonoBehaviour {
 	public void DecreaseSize() {
 		//TODO: анимация
 		if (outterLayerStack.Count == 0) {
-			DestroySelf();
+			DestroySelf ();
+			OnGameOver ();
 		} else {
+			var colorTypeDestroy = outterLayerStack.Peek ().GetComponent <PlayerOutterLayer> ().colorType;
+			while (outterLayerStack.Peek ().GetComponent <PlayerOutterLayer> ().colorType == colorTypeDestroy) {
+				playerCollider.radius /= (expectedSize / (expectedSize - increasePlayerSizeDelta));
 
-			playerCollider.radius /= (expectedSize / (expectedSize - increasePlayerSizeDelta));
+				expectedSize -= increasePlayerSizeDelta;
+				expectedGlowSize -= increaseGlowSizeDelta;
 
-			expectedSize -= increasePlayerSizeDelta;
-			expectedGlowSize -= increaseGlowSizeDelta;
+				var lastLayer = outterLayerStack.Pop () as GameObject;
+				lastLayer.GetComponent<PlayerOutterLayer>().DestroySelf();
 
-			var lastLayer = outterLayerStack.Pop () as GameObject;
-			lastLayer.GetComponent<PlayerOutterLayer>().DestroySelf();
-
-			glowObject.transform.localScale = new Vector2(expectedGlowSize, expectedGlowSize);
+				glowObject.transform.localScale = new Vector2(expectedGlowSize, expectedGlowSize);
+			}
 		}
 
 	}
@@ -141,19 +144,24 @@ public class Player : MonoBehaviour {
 	void Update () {
 		CheckInput();
 		HandleCurrentColor();
-		if (Input.GetKeyUp("space")) {
+	}
+
+	void CheckInput() {
+		if (Input.GetKeyDown (KeyCode.LeftArrow) ||
+			Input.touchCount >0 && Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x<Screen.width/2.0f) {
+			ChangeColorType (ColorType.first);
+		} else if (Input.GetKeyDown (KeyCode.RightArrow) || 
+			Input.touchCount >0 &&  Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x>Screen.width/2.0f) {
+			ChangeColorType (ColorType.second);
+		}
+
+		if (Input.GetKeyDown (KeyCode.Space) ||
+			Input.touchCount == 2 && Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x<Screen.width/2.0f &&
+			Input.GetTouch (1).phase == TouchPhase.Began && Input.GetTouch(1).position.x>Screen.width/2.0f) {
 			if (bulletsForPower == maxBulletsForPower) {
 				Debug.Log("Go!");
 				performSuperPower();
 			}
-		}
-	}
-
-	void CheckInput() {
-		if (Input.touchCount >0 && Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x<Screen.width/2.0f) {
-			ChangeColorType (ColorType.first);
-		} else if (Input.touchCount >0 &&  Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x>Screen.width/2.0f) {
-			ChangeColorType (ColorType.second);
 		}
 	}
 

@@ -5,7 +5,6 @@ public class BulletPatternManager : MonoBehaviour {
 
 	public LinearBulletPattern linearBulletPattern;
 
-
 	// Use this for initialization
 	void Start () {
 		LinearBulletPattern.PatternEnded += SpawnRandomPattern;
@@ -17,16 +16,18 @@ public class BulletPatternManager : MonoBehaviour {
 	}
 
 	public void SpawnRandomPattern() {
-        //random дописать
-        int number = 0;
-        switch (number) {
-		case 0:
-			Debug.Log ("Added linear bullet pattern");
-			StartCoroutine(linearBulletPattern.SpawnPattern (5));
-            break;
-		default:
-			StartCoroutine(linearBulletPattern.SpawnPattern (5));
-            break;
-        }
+		if (GameManager.gameState == GameManager.GameState.Playing) {
+			//random дописать
+			int number = 0;
+			switch (number) {
+			case 0:
+				Debug.Log ("Added linear bullet pattern");
+				StartCoroutine (linearBulletPattern.SpawnPattern (5));
+				break;
+			default:
+				StartCoroutine (linearBulletPattern.SpawnPattern (5));
+				break;
+			}
+		}
 	}
 }
