@@ -150,9 +150,9 @@ public class Player : MonoBehaviour {
 	}
 
 	void CheckInput() {
-		if (Input.GetKeyDown ("left")) {
+		if (Input.touchCount >0 && Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x<Screen.width/2.0f) {
 			ChangeColorType (ColorType.first);
-		} else if (Input.GetKeyDown ("right")) {
+		} else if (Input.touchCount >0 &&  Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x>Screen.width/2.0f) {
 			ChangeColorType (ColorType.second);
 		}
 	}

@@ -3,11 +3,12 @@ using System.Collections;
 
 public class BulletPatternManager : MonoBehaviour {
 
+	public LinearBulletPattern linearBulletPattern;
 
 
 	// Use this for initialization
 	void Start () {
-	    
+		LinearBulletPattern.PatternEnded += SpawnRandomPattern;
 	}
 	
 	// Update is called once per frame
@@ -19,14 +20,13 @@ public class BulletPatternManager : MonoBehaviour {
         //random дописать
         int number = 0;
         switch (number) {
-            case 0:
-                gameObject.AddComponent<LinearBulletPattern>();
-                LinearBulletPattern.PatternEnded += SpawnRandomPattern;
-                break;
-            default:
-                gameObject.AddComponent<LinearBulletPattern>();
-                LinearBulletPattern.PatternEnded += SpawnRandomPattern;
-                break;
+		case 0:
+			Debug.Log ("Added linear bullet pattern");
+			StartCoroutine(linearBulletPattern.SpawnPattern (5));
+            break;
+		default:
+			StartCoroutine(linearBulletPattern.SpawnPattern (5));
+            break;
         }
 	}
 }

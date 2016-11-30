@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour {
 
 	public Player player;
 	//TODO: заменить на нормальный BulletPatternManager
-	public LinearBulletPattern pattern;
-
     private BulletPatternManager patternManager;
 	public Text scoreText;
 	public Text superPowerText;
@@ -32,8 +30,6 @@ public class GameManager : MonoBehaviour {
 		Player.OnGameOver += PerformGameOver;
 		Player.OnSuperPower += PerformSuperPower;
 		Player.OnSuperPowerBulletCatch += IncreaseScore;
-        patternManager = gameObject.GetComponent<BulletPatternManager>();
-        patternManager.SpawnRandomPattern();
 	}
 
 	// Update is called once per frame
@@ -76,7 +72,8 @@ public class GameManager : MonoBehaviour {
 
 	void StartGame() {
 		gameState = GameState.Playing;
-		StartCoroutine(pattern.SpawnPattern());
+		patternManager = gameObject.GetComponent<BulletPatternManager>();
+		patternManager.SpawnRandomPattern();
 	}
 
 	void ToMainMenu() {
@@ -107,8 +104,8 @@ public class GameManager : MonoBehaviour {
 				ToMainMenu();
 			}
 		} else if (gameState == GameState.Menu) {
-			if (Input.GetKeyUp(KeyCode.UpArrow)) {
-				StartGame ();
+			if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) {
+				StartGame();
 			}
 		}
 	}

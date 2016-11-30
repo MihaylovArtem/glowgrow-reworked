@@ -9,26 +9,29 @@ public abstract class BulletPattern : MonoBehaviour
 	public static event BulletPatterDelegate PatternEnded;
     public Player player;
 
-	public int bulletAmount = 0;
-    public int remainingBulletAmount; // Когда станет 0, вызываем ивент PatternEnded
+	protected int bulletAmount = 0;
+	protected int sentBulletAmount = 0;
+	protected int remainingBulletAmount = -1; // Когда станет 0, вызываем ивент PatternEnded
 
     void Start() {
-        remainingBulletAmount = bulletAmount;
+		Debug.Log (player);
         Player.OnWrongBulletCatch += decreaseRBA;
         Player.OnRightBulletCatch += decreaseRBA;
+		Player.OnSuperPowerBulletCatch += decreaseRBA;
     }
 
     void Update() {
-        if (remainingBulletAmount == 0) {
+		if (remainingBulletAmount == 0) {
+			remainingBulletAmount = -1;
             PatternEnded();
-            Destroy(this);
         }
     }
 
     void decreaseRBA() {
+		Debug.Log (remainingBulletAmount);
         remainingBulletAmount--;
     }
 
-    public abstract void SpawnSingleBullet();
-	public abstract IEnumerator SpawnPattern();
+	public abstract void SpawnSingleBullet();
+	public abstract IEnumerator SpawnPattern(int bulletsAmount);
 }
