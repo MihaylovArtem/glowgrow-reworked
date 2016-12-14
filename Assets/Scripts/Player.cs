@@ -201,12 +201,13 @@ public class Player : MonoBehaviour {
 				if (bulletsForPower < maxBulletsForPower) {
 					bulletsForPower++;
 				}
+				bullet.DestroySelf ();
 			} else {
 				DecreaseSize ();
 				OnWrongBulletCatch();
 				bulletsForPower = 0;
+				bullet.DestroySelfWithExplosion ();
 			}
-			bullet.DestroySelf ();
 		}
 	}
 }

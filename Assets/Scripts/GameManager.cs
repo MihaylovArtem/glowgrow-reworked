@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour {
 
 	void PerformNextLevel() {
 		palleteManager.ChangePallete ();
+		DestroyAllBullets ();
 		levelNum++;
 	}
 
@@ -113,7 +114,7 @@ public class GameManager : MonoBehaviour {
 	void DestroyAllBullets() {
 		GameObject[] AllBullets = GameObject.FindGameObjectsWithTag("Bullet");
 		foreach (GameObject bullet in AllBullets) {
-			bullet.GetComponent<Bullet>().DestroySelf();
+			bullet.GetComponent<Bullet>().DestroySelfWithExplosion();
 		}
 	}
 

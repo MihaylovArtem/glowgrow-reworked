@@ -22,10 +22,10 @@ public class BulletPatternManager : MonoBehaviour {
 			switch (number) {
 			case 0:
 				Debug.Log ("Added linear bullet pattern");
-				StartCoroutine (linearBulletPattern.SpawnPattern (5));
+				StartCoroutine (linearBulletPattern.SpawnPattern (4));
 				break;
 			default:
-				StartCoroutine (linearBulletPattern.SpawnPattern (5));
+				StartCoroutine (linearBulletPattern.SpawnPattern (4));
 				break;
 			}
 		}
