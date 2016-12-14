@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start() {
 		Player.OnRightBulletCatch += IncreaseScore;
+        Player.OnRightBonusBulletCatch += BonusIncreaseScore;
 		Player.OnRightBulletCatch += IncreaseBulletsForPower;
 		Player.OnWrongBulletCatch += DecreaseScore;
 		Player.OnMaxBulletCountCatch += PerformNextLevel;
@@ -57,9 +58,12 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void IncreaseScore() {
-		currentScore++;
+		currentScore+=10;
 	}
 
+    void BonusIncreaseScore(int score) {
+        currentScore += score;
+    }
 	void IncreaseBulletsForPower() {
 		if (bulletsForPower < maxBulletsForPower) {
 			bulletsForPower++;
@@ -67,7 +71,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void DecreaseScore() {
-		currentScore--;
+		currentScore-=10;
 		bulletsForPower = 0;
 	}
 

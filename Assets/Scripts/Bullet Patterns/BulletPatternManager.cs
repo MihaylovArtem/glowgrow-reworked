@@ -4,6 +4,7 @@ using System.Collections;
 public class BulletPatternManager : MonoBehaviour {
 
 	public LinearBulletPattern linearBulletPattern;
+    public FallBulletPattern fallBulletPattern;
 
 	// Use this for initialization
 	void Start () {
@@ -22,7 +23,7 @@ public class BulletPatternManager : MonoBehaviour {
 			switch (number) {
 			case 0:
 				Debug.Log ("Added linear bullet pattern");
-				StartCoroutine (linearBulletPattern.SpawnPattern (5));
+                StartCoroutine(linearBulletPattern.SpawnPattern(5));
 				break;
 			default:
 				StartCoroutine (linearBulletPattern.SpawnPattern (5));
