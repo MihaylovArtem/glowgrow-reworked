@@ -4,8 +4,6 @@ using UnityEngine.UI;
 public class Bullet : MonoBehaviour
 {
 
-
-
 //    public <> bulletType;
 //    public <> speed;
 
@@ -15,9 +13,9 @@ public class Bullet : MonoBehaviour
 	private Color expectedColor {
 		get {
 			if (colorType == ColorType.first) {
-				return PalleteManager.getCurrentPallete().bulletFirstTypeColor;
+				return PalleteManager.currentPallete.bulletFirstTypeColor;
 			} else {
-				return PalleteManager.getCurrentPallete().bulletSecondTypeColor;
+				return PalleteManager.currentPallete.bulletSecondTypeColor;
 			}
 		}
 	}
@@ -56,10 +54,5 @@ public class Bullet : MonoBehaviour
 	public void setColorType(ColorType type) {
 		colorType = type;
 		sprite.color = expectedColor;
-	}
-
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

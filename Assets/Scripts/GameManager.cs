@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
+//	public delegate void GameManagerDelegate();
+//	public static event GameManagerDelegate OnLevelChange;
+
 	const float scaleDuration = 2.0f;
 	float scaleTimer = 0.0f;
 	Vector3 menuScale = new Vector3(1,1,1);
@@ -11,9 +14,6 @@ public class GameManager : MonoBehaviour {
 
 	Vector3 targetScale = new Vector3(1,1,1);
 	Vector3 originalScale = new Vector3(1,1,1);
-
-//	Vector3 cameraStartingPosition = new Vector3 (0, 0, -8);
-//	Vector3 cameraEndingPosition = new Vector3 (0, 0, -8);
 
 	public enum GameState {
 		Menu, Playing, Pause, GameOver
@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour {
 
 	public Player player;
 	//TODO: заменить на нормальный BulletPatternManager
-    private BulletPatternManager patternManager;
+	private BulletPatternManager patternManager;
+	public PalleteManager palleteManager;
 	public Text scoreText;
 	public Text superPowerText;
 	public Text levelText;
@@ -31,6 +32,30 @@ public class GameManager : MonoBehaviour {
 	private int bulletsForPower = 0;
 	private const int maxBulletsForPower = 10;
 	public GameObject menuPanel;
+
+	public SpriteRenderer backgroundSprite;
+	public Image[] panelBackgroundSprites;
+
+	private Color lastBackgroundColor {
+		get {
+			return PalleteManager.previousPallete.backgroundColor;
+		}
+	}
+	private Color lastPanelBackgroundColor {
+		get {
+			return PalleteManager.previousPallete.backgroundColorSecondary;
+		}
+	}
+	private Color backgroundExpectedColor {
+		get {
+			return PalleteManager.currentPallete.backgroundColor;
+		}
+	}
+	private Color panelBackgroundExpectedColor {
+		get {
+			return PalleteManager.currentPallete.backgroundColorSecondary;
+		}
+	}
 
 	public int levelNum = 1;
 
@@ -50,11 +75,15 @@ public class GameManager : MonoBehaviour {
 		Player.OnGameOver += PerformGameOver;
 		Player.OnSuperPower += PerformSuperPower;
 		Player.OnSuperPowerBulletCatch += IncreaseScore;
+
+		backgroundSprite.color = backgroundExpectedColor;
+		SetPanelBackgroundColorTo(panelBackgroundExpectedColor);
 	}
 
 	// Update is called once per frame
 	void Update () {
 		CheckInput ();
+		HandleCurrentColor ();
 	}
 
 	void IncreaseScore() {
@@ -76,6 +105,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void PerformNextLevel() {
+		palleteManager.ChangePallete ();
 		levelNum++;
 	}
 
@@ -107,7 +137,6 @@ public class GameManager : MonoBehaviour {
 		currentScore = 0;
 		bulletsForPower = 0;
 		levelNum = 1;
-
 	}
 
 	void ToMainMenu() {
@@ -132,6 +161,26 @@ public class GameManager : MonoBehaviour {
 		menuPanel.transform.localScale = Vector3.Lerp (originalScale, targetScale, scaleTimer / scaleDuration);
 	}
 
+	void HandleCurrentColor() {
+		if (PalleteManager.isColorChangeInProgress) {
+			SetPanelBackgroundColorTo(Color.Lerp (lastPanelBackgroundColor, panelBackgroundExpectedColor, PalleteManager.colorChangeProgress));
+			backgroundSprite.color = Color.Lerp (lastBackgroundColor, backgroundExpectedColor, PalleteManager.colorChangeProgress);
+		} else {
+			if (panelBackgroundSprites[0].color != panelBackgroundExpectedColor) {
+				SetPanelBackgroundColorTo(panelBackgroundExpectedColor);
+			}
+			if (backgroundSprite.color != backgroundExpectedColor) {
+				backgroundSprite.color = backgroundExpectedColor;
+			}
+		}
+	}
+
+	void SetPanelBackgroundColorTo(Color color) {
+		foreach (Image panel in panelBackgroundSprites)  {
+			panel.color = color;
+		}
+	}
+
 	void CheckInput() {
 		if (gameState == GameState.Menu) {
 			if (Input.GetKeyDown (KeyCode.Space) || 
@@ -145,5 +194,4 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
-
 }

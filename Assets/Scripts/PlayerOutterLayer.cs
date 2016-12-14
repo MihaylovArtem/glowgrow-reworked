@@ -7,9 +7,9 @@ public class PlayerOutterLayer : MonoBehaviour {
 	private Color expectedColor {
 		get {
 			if (colorType == ColorType.first) {
-				return PalleteManager.getCurrentPallete().bulletFirstTypeColor;
+				return PalleteManager.currentPallete.bulletFirstTypeColor;
 			} else {
-				return PalleteManager.getCurrentPallete().bulletSecondTypeColor;
+				return PalleteManager.currentPallete.bulletSecondTypeColor;
 			}
 		}
 	}

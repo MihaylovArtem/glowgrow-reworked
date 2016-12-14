@@ -9,11 +9,11 @@ public class Pallete : MonoBehaviour {
 	public Color bulletSecondTypeColor;
 
 
-	public Pallete(Color backgroundColor, Color backgroundColorSecondary, Color playerColor, Color bulletFirstTypeColor, Color bulletSecondTypeColor)
+	public Pallete(Color backgroundColor, Color backgroundColorSecondary, Color bulletFirstTypeColor, Color bulletSecondTypeColor)
 	{
 		this.backgroundColor = backgroundColor;
 		this.backgroundColorSecondary = backgroundColorSecondary;
-		this.playerColor = playerColor;
+		this.playerColor = backgroundColorSecondary;
 		this.bulletFirstTypeColor = bulletFirstTypeColor;
 		this.bulletSecondTypeColor = bulletSecondTypeColor;
 	}

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class Player : MonoBehaviour {
-	const int bulletMaxCount = 20;
+	const int bulletMaxCount = 4;
 
     public delegate void PlayerDelegate();
     public delegate void PlayerDelegateWithScore(int score);
@@ -17,14 +17,24 @@ public class Player : MonoBehaviour {
     public static event PlayerDelegate OnSuperPowerBulletCatch;
 
 	private ColorType currentColorType = ColorType.first;
-	private Color lastColor;
-	private Color expectedColor {
+	private Color glowLastColor;
+	private Color glowExpectedColor {
 		get {
 			if (currentColorType == ColorType.first) {
-				return PalleteManager.getCurrentPallete().bulletFirstTypeColor;
+				return PalleteManager.currentPallete.bulletFirstTypeColor;
 			} else {
-				return PalleteManager.getCurrentPallete().bulletSecondTypeColor;
+				return PalleteManager.currentPallete.bulletSecondTypeColor;
 			}
+		}
+	}
+	private Color playerLastColor {
+		get {
+			return PalleteManager.previousPallete.playerColor;
+		}
+	}
+	private Color playerExpectedColor {
+		get {
+			return PalleteManager.currentPallete.playerColor;
 		}
 	}
 	public Stack<GameObject> outterLayerStack = new Stack<GameObject>();
@@ -38,19 +48,20 @@ public class Player : MonoBehaviour {
 
 	private CircleCollider2D playerCollider;
 
-	private float colorChangeDuration = 0.2f;
-	private float colorChangeTimer = 0.0f;
+	private float glowColorChangeDuration = 0.2f;
+	private float glowColorChangeTimer = 0.0f;
 
 	private int bulletsForPower = 0;
 	private const int maxBulletsForPower = 10;
 
+	public SpriteRenderer playerSpriteRenderer;
 	public GameObject glowObject; //необходимо, чтобы каждый раз не искать в компонентах объекта glow компонент цвет;
 	public SpriteRenderer glowSpriteRenderer; //необходимо, чтобы каждый раз не искать в компонентах объекта glow компонент цвет;
 
-	public void ChangeColorType(ColorType type) {
-		colorChangeTimer = 0.0f;
+	public void ChangeGlowColorType(ColorType type) {
+		glowColorChangeTimer = 0.0f;
 		currentColorType = type;
-		lastColor = glowSpriteRenderer.color;
+		glowLastColor = glowSpriteRenderer.color;
 	}
 
 	public void IncreaseSize(Bullet catchedBullet) {
@@ -73,7 +84,6 @@ public class Player : MonoBehaviour {
 			DestroyAllLayers();
 			OnMaxBulletCountCatch();
 		}
-
 	}
 
 	public void DecreaseSize() {
@@ -93,9 +103,11 @@ public class Player : MonoBehaviour {
 				lastLayer.GetComponent<PlayerOutterLayer>().DestroySelf();
 
 				glowObject.transform.localScale = new Vector2(expectedGlowSize, expectedGlowSize);
+				if (outterLayerStack.Count == 0) {
+					break;
+				}
 			}
 		}
-
 	}
 
 	public void DestroyAllLayers() {
@@ -132,7 +144,8 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		glowSpriteRenderer.color = PalleteManager.getCurrentPallete().bulletFirstTypeColor;
+		glowSpriteRenderer.color = glowExpectedColor;
+		playerSpriteRenderer.color = playerExpectedColor;
 
 		playerCollider = gameObject.GetComponent<CircleCollider2D>();
 
@@ -152,10 +165,10 @@ public class Player : MonoBehaviour {
 	void CheckInput() {
 		if (Input.GetKeyDown (KeyCode.LeftArrow) ||
 			Input.touchCount >0 && Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x<Screen.width/2.0f) {
-			ChangeColorType (ColorType.first);
+			ChangeGlowColorType (ColorType.first);
 		} else if (Input.GetKeyDown (KeyCode.RightArrow) || 
 			Input.touchCount >0 &&  Input.GetTouch (0).phase == TouchPhase.Began && Input.GetTouch(0).position.x>Screen.width/2.0f) {
-			ChangeColorType (ColorType.second);
+			ChangeGlowColorType (ColorType.second);
 		}
 
 		if (Input.GetKeyDown (KeyCode.Space) ||
@@ -169,9 +182,17 @@ public class Player : MonoBehaviour {
 	}
 
 	void HandleCurrentColor() {
-		colorChangeTimer += Time.deltaTime;
-		var completionPercent = colorChangeTimer / colorChangeDuration;
-		glowSpriteRenderer.color = Color.Lerp (lastColor, expectedColor, completionPercent);
+		glowColorChangeTimer += Time.deltaTime;
+		var completionPercent = glowColorChangeTimer / glowColorChangeDuration;
+
+		glowSpriteRenderer.color = Color.Lerp (glowLastColor, glowExpectedColor, completionPercent);
+		if (PalleteManager.isColorChangeInProgress) {
+			playerSpriteRenderer.color = Color.Lerp (playerLastColor, playerExpectedColor, PalleteManager.colorChangeProgress);
+		} else {
+			if (playerSpriteRenderer.color != playerExpectedColor) {
+				playerSpriteRenderer.color = playerExpectedColor;
+			}
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
