@@ -28,7 +28,6 @@ public abstract class BulletPattern : MonoBehaviour
     }
 
     void decreaseRBA() {
-		Debug.Log (remainingBulletAmount);
         remainingBulletAmount--;
     }
 
