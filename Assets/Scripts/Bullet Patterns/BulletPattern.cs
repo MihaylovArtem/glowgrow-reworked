@@ -12,11 +12,12 @@ public abstract class BulletPattern : MonoBehaviour
 	protected int bulletAmount = 0;
 	protected int sentBulletAmount = 0;
 	protected int remainingBulletAmount = -1; // Когда станет 0, вызываем ивент PatternEnded
+    protected ColorType nextColorType = ColorType.first;
 
     void Start() {
-		Debug.Log (player);
         Player.OnWrongBulletCatch += decreaseRBA;
         Player.OnRightBulletCatch += decreaseRBA;
+        Player.OnRightBonusBulletCatch += decreaseRBAWithScore;
 		Player.OnSuperPowerBulletCatch += decreaseRBA;
     }
 
@@ -25,6 +26,10 @@ public abstract class BulletPattern : MonoBehaviour
 			remainingBulletAmount = -1;
             PatternEnded();
         }
+    }
+
+    void decreaseRBAWithScore(int score) {
+        remainingBulletAmount--;
     }
 
     void decreaseRBA() {

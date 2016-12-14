@@ -3,8 +3,6 @@ using System;
 using System.Collections;
 
 public class LinearBulletPattern : BulletPattern {
-	private ColorType nextColorType = ColorType.first;
-
 	public override void SpawnSingleBullet() {
 		sentBulletAmount++;
 		var bullet = Instantiate(bulletPrefab) as GameObject;

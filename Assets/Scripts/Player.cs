@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Player : MonoBehaviour {
 	const int bulletMaxCount = 4;
 
-	public delegate void PlayerDelegate();
-	public static event PlayerDelegate OnRightBulletCatch;
+    public delegate void PlayerDelegate();
+    public delegate void PlayerDelegateWithScore(int score);
+    public static event PlayerDelegate OnRightBulletCatch;
+    public static event PlayerDelegateWithScore OnRightBonusBulletCatch;
 	public static event PlayerDelegate OnWrongBulletCatch;
 	public static event PlayerDelegate OnMaxBulletCountCatch;
 	public static event PlayerDelegate OnGameOver;
 	public static event PlayerDelegate OnSuperPower;
-	public static event PlayerDelegate OnSuperPowerBulletCatch;
+    public static event PlayerDelegate OnSuperPowerBulletCatch;
 
 	private ColorType currentColorType = ColorType.first;
 	private Color glowLastColor;
@@ -197,7 +200,12 @@ public class Player : MonoBehaviour {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 			if (bullet.colorType == currentColorType) {
 				IncreaseSize (bullet);
-				OnRightBulletCatch ();
+                if (bullet.isBonus) {
+                    OnRightBonusBulletCatch(Convert.ToInt32(bullet.bulletScore.text));
+                }
+                else {
+                    OnRightBulletCatch();
+                }
 				if (bulletsForPower < maxBulletsForPower) {
 					bulletsForPower++;
 				}

@@ -4,6 +4,7 @@ using System.Collections;
 public class BulletPatternManager : MonoBehaviour {
 
 	public LinearBulletPattern linearBulletPattern;
+    public FallBulletPattern fallBulletPattern;
 
 	// Use this for initialization
 	void Start () {
