@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 public class Bullet : MonoBehaviour
 {
+	public delegate void BulletDelegate();
+	public static event BulletDelegate OnBulletDestroy;
 
 //    public <> bulletType;
 //    public <> speed;
@@ -25,6 +27,7 @@ public class Bullet : MonoBehaviour
 
     //уничтожается объект пули
 	public void DestroySelf() {
+		OnBulletDestroy ();
 		Destroy (gameObject);
     }
     //уничтожается объект пули и вызывается взрыв частиц
@@ -35,7 +38,7 @@ public class Bullet : MonoBehaviour
 		particlesComponent.startColor = sprite.color;
 		particlesComponent.Emit(16);
 		Destroy (particles, 3);
-		Destroy (gameObject);
+		DestroySelf();
     }
 
     public void SetSpeed() {
@@ -50,7 +53,7 @@ public class Bullet : MonoBehaviour
 	void Start () {
         if (Random.Range(0, 20) == 7) {
             isBonus = true;
-            transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+			transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             bulletScore.text = (Random.Range(2,6) * 50).ToString();
         }
         else {

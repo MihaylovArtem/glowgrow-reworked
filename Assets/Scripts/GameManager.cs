@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour {
 	public Text scoreText;
 	public Text superPowerText;
 	public Text levelText;
+	public Text highscoreText;
 	public int currentScore = 0;
 	private int bulletsForPower = 0;
 	private const int maxBulletsForPower = 10;
@@ -35,6 +36,14 @@ public class GameManager : MonoBehaviour {
 
 	public SpriteRenderer backgroundSprite;
 	public Image[] panelBackgroundSprites;
+
+	private string highscorePrefsKey = "current_highscore";
+	private int highscore {
+		get {
+			var saved = PlayerPrefs.GetInt (highscorePrefsKey);
+			return saved;
+		}
+	}
 
 	private Color lastBackgroundColor {
 		get {
@@ -112,6 +121,9 @@ public class GameManager : MonoBehaviour {
 
 	void PerformGameOver() {
 		gameState = GameState.GameOver;
+		if (highscore < currentScore) {
+			PlayerPrefs.SetInt ("current_highscore", currentScore);
+		}
 		DestroyAllBullets ();
 	}
 
@@ -160,6 +172,8 @@ public class GameManager : MonoBehaviour {
 			levelText.text = "Level " + levelNum.ToString ();
 		}
 		menuPanel.transform.localScale = Vector3.Lerp (originalScale, targetScale, scaleTimer / scaleDuration);
+
+		highscoreText.text = "Highscore:\n" + highscore.ToString () + " points";
 	}
 
 	void HandleCurrentColor() {

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 
 public class LinearBulletPattern : BulletPattern {
+
 	public override void SpawnSingleBullet() {
 		sentBulletAmount++;
 		var bullet = Instantiate(bulletPrefab) as GameObject;
@@ -24,7 +25,7 @@ public class LinearBulletPattern : BulletPattern {
 			}
 			SpawnSingleBullet();
 			nextColorType = (sentBulletAmount % 3 == 1) ? ColorType.second : ColorType.first;
-			yield return new WaitForSeconds(0.40f);
+			yield return new WaitForSeconds(0.20f);
 		}
 	}
 

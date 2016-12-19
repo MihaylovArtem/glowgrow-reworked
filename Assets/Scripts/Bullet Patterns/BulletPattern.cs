@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public abstract class BulletPattern : MonoBehaviour
 {
@@ -15,25 +16,27 @@ public abstract class BulletPattern : MonoBehaviour
     protected ColorType nextColorType = ColorType.first;
 
     void Start() {
-        Player.OnWrongBulletCatch += decreaseRBA;
-        Player.OnRightBulletCatch += decreaseRBA;
-        Player.OnRightBonusBulletCatch += decreaseRBAWithScore;
-		Player.OnSuperPowerBulletCatch += decreaseRBA;
+		Bullet.OnBulletDestroy += decreaseRBA;
+		CheckBullets ();
     }
 
     void Update() {
-		if (remainingBulletAmount == 0) {
-			remainingBulletAmount = -1;
-            PatternEnded();
-        }
+//		if (remainingBulletAmount <= 0) {
+//			remainingBulletAmount = null;
+//        }
     }
 
-    void decreaseRBAWithScore(int score) {
-        remainingBulletAmount--;
-    }
+	void CheckBullets() {
+		var bullets = GameObject.FindGameObjectsWithTag ("Bullet");
+		if (bullets.Count() == 0) {
+			PatternEnded();
+		}
+		Invoke ("CheckBullets", 1.0f);
+	}
 
     void decreaseRBA() {
-        remainingBulletAmount--;
+//		remainingBulletAmount--;
+//		Debug.Log (remainingBulletAmount.ToString ());
     }
 
 	public abstract void SpawnSingleBullet();

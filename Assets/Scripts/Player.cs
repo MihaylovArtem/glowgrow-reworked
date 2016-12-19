@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class Player : MonoBehaviour {
-	const int bulletMaxCount = 4;
+	const int bulletMaxCount = 8;
 
     public delegate void PlayerDelegate();
     public delegate void PlayerDelegateWithScore(int score);
@@ -41,7 +41,11 @@ public class Player : MonoBehaviour {
 	public GameObject outterLayerPrefab;
 	private float expectedSize;
 	private float expectedGlowSize;
-	private float currentSize;
+	private float previousSize {
+		get {
+			return expectedSize - increasePlayerSizeDelta;
+		}
+	}
 
 	private float increasePlayerSizeDelta;
 	private float increaseGlowSizeDelta;
@@ -71,14 +75,15 @@ public class Player : MonoBehaviour {
 		playerCollider.radius *= expectedSize / (expectedSize - increasePlayerSizeDelta);
 
 		var outterLayer = Instantiate (outterLayerPrefab, gameObject.transform) as GameObject;
-		outterLayerStack.Push(outterLayer);
 
 		var outterLayerScript = outterLayer.GetComponent<PlayerOutterLayer> ();
 		outterLayerScript.colorType = catchedBullet.colorType;
+		outterLayerScript.neededScale = expectedSize;
 
-		outterLayer.transform.position = new Vector3 (0, 0, outterLayerStack.Count/100.0f);
-		outterLayer.transform.localScale = new Vector2 (expectedSize, expectedSize);
+		outterLayer.transform.position = new Vector3 (0, 0, outterLayerStack.Count+1.0f/100.0f);
+		outterLayer.transform.localScale = new Vector3 (previousSize, previousSize, outterLayer.transform.localScale.z);
 		glowObject.transform.localScale = new Vector2 (expectedGlowSize, expectedGlowSize);
+		outterLayerStack.Push(outterLayer);
 
 		if (outterLayerStack.Count == bulletMaxCount) {
 			DestroyAllLayers();
