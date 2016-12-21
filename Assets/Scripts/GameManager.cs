@@ -4,9 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
-//	public delegate void GameManagerDelegate();
-//	public static event GameManagerDelegate OnLevelChange;
-
 	const float scaleDuration = 2.0f;
 	float scaleTimer = 0.0f;
 	Vector3 menuScale = new Vector3(1,1,1);
@@ -22,7 +19,6 @@ public class GameManager : MonoBehaviour {
 	static public GameState gameState = GameState.Menu;
 
 	public Player player;
-	//TODO: заменить на нормальный BulletPatternManager
 	private BulletPatternManager patternManager;
 	public PalleteManager palleteManager;
 	public Text scoreText;
@@ -149,11 +145,16 @@ public class GameManager : MonoBehaviour {
 		scaleTimer = 0.0f;
 		gameState = GameState.Playing;
 		patternManager = gameObject.GetComponent<BulletPatternManager>();
-		patternManager.SpawnRandomPattern();
+
+		Invoke("startTestPattern", 1.0f);
 
 		currentScore = 0;
 		bulletsForPower = 0;
 		levelNum = 1;
+	}
+
+	void startTestPattern() {
+		patternManager.SpawnTestPattern();
 	}
 
 	void ToMainMenu() {

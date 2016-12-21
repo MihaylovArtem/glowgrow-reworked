@@ -7,10 +7,11 @@ public class BulletPatternManager : MonoBehaviour {
     public FallBulletPattern fallBulletPattern;
 	public SingleSpiralPattern singleSpiralPattern;
 	public DoubleSpiralPattern doubleSpiralPattern;
+	public TestBulletPattern testBulletPattern;
 
 	// Use this for initialization
 	void Start () {
-		CheckBullets();
+		
 	}
 	
 	// Update is called once per frame
@@ -46,5 +47,10 @@ public class BulletPatternManager : MonoBehaviour {
 				break;
 			}
 		}
+	}
+
+	public void SpawnTestPattern() {
+		StartCoroutine(testBulletPattern.SpawnPattern(0));
+		Invoke("CheckBullets", 5.0f);
 	}
 }
