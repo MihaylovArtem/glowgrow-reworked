@@ -6,8 +6,6 @@ using System.Linq;
 public abstract class BulletPattern : MonoBehaviour
 {
 	public GameObject bulletPrefab;
-	public delegate void BulletPatterDelegate();
-	public static event BulletPatterDelegate PatternEnded;
     public Player player;
 
 	protected int bulletAmount = 0;
@@ -17,7 +15,6 @@ public abstract class BulletPattern : MonoBehaviour
 
     void Start() {
 		Bullet.OnBulletDestroy += decreaseRBA;
-		CheckBullets ();
     }
 
     void Update() {
@@ -25,14 +22,6 @@ public abstract class BulletPattern : MonoBehaviour
 //			remainingBulletAmount = null;
 //        }
     }
-
-	void CheckBullets() {
-		var bullets = GameObject.FindGameObjectsWithTag ("Bullet");
-		if (bullets.Count() == 0) {
-			PatternEnded();
-		}
-		Invoke ("CheckBullets", 1.0f);
-	}
 
     void decreaseRBA() {
 //		remainingBulletAmount--;

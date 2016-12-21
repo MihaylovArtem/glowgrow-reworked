@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class Player : MonoBehaviour {
-	const int bulletMaxCount = 8;
+	const int bulletMaxCount = 20;
 
     public delegate void PlayerDelegate();
     public delegate void PlayerDelegateWithScore(int score);
@@ -80,7 +80,7 @@ public class Player : MonoBehaviour {
 		outterLayerScript.colorType = catchedBullet.colorType;
 		outterLayerScript.neededScale = expectedSize;
 
-		outterLayer.transform.position = new Vector3 (0, 0, outterLayerStack.Count+1.0f/100.0f);
+		outterLayer.transform.position = new Vector3 (0, 0, outterLayerStack.Count+0.50f/100.0f);
 		outterLayer.transform.localScale = new Vector3 (previousSize, previousSize, outterLayer.transform.localScale.z);
 		glowObject.transform.localScale = new Vector2 (expectedGlowSize, expectedGlowSize);
 		outterLayerStack.Push(outterLayer);
@@ -92,7 +92,6 @@ public class Player : MonoBehaviour {
 	}
 
 	public void DecreaseSize() {
-		//TODO: анимация
 		if (outterLayerStack.Count == 0) {
 			DestroySelf ();
 			OnGameOver ();
@@ -157,8 +156,8 @@ public class Player : MonoBehaviour {
 		expectedSize = 1;
 		expectedGlowSize = glowObject.transform.localScale.x;
 
-		increasePlayerSizeDelta = expectedSize / 10;
-		increaseGlowSizeDelta = expectedGlowSize / 10;
+		increasePlayerSizeDelta = expectedSize / 20;
+		increaseGlowSizeDelta = expectedGlowSize / 20;
 	}
 
 	// Update is called once per frame

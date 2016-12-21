@@ -5,11 +5,12 @@ public class BulletPatternManager : MonoBehaviour {
 
 	public LinearBulletPattern linearBulletPattern;
     public FallBulletPattern fallBulletPattern;
+	public SingleSpiralPattern singleSpiralPattern;
+	public DoubleSpiralPattern doubleSpiralPattern;
 
 	// Use this for initialization
 	void Start () {
-		LinearBulletPattern.PatternEnded += SpawnRandomPattern;
-        FallBulletPattern.PatternEnded += SpawnRandomPattern;
+		CheckBullets();
 	}
 	
 	// Update is called once per frame
@@ -17,19 +18,32 @@ public class BulletPatternManager : MonoBehaviour {
 	
 	}
 
+	void CheckBullets() {
+		var bullets = GameObject.FindGameObjectsWithTag("Bullet");
+		if (bullets.Length == 0) {
+			SpawnRandomPattern();
+		}
+		Invoke("CheckBullets", 1.0f);
+	}
+
 	public void SpawnRandomPattern() {
 		if (GameManager.gameState == GameManager.GameState.Playing) {
-			int number = Random.Range(0,2);
+			int number = Random.Range(0,4);
+			number = 3;
 			switch (number) {
 			case 0:
-				Debug.Log ("Added linear bullet pattern");
 				StartCoroutine(linearBulletPattern.SpawnPattern (8));
 				break;
             case 1:
                 StartCoroutine(fallBulletPattern.SpawnPattern (12));
-                break;
+				break;
+			case 2:
+				StartCoroutine(singleSpiralPattern.SpawnPattern(6));
+				break;
+			case 3:
+				StartCoroutine(doubleSpiralPattern.SpawnPattern(4));
+				break;
 			default:
-				//StartCoroutine (linearBulletPattern.SpawnPattern (8));
 				break;
 			}
 		}

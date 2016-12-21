@@ -19,8 +19,8 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed = 2.0f;
     public float bulletCurve = 0.8f;
     
-    float maxGravDist = 20.0f;
-    float maxGravity = 20.0f;
+    float maxGravDist = 40.0f;
+    float maxGravity = 5.0f;
 
 	public GameObject particlesPrefab;
 

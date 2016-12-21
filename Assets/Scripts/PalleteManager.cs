@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections; 
 
 public class PalleteManager : MonoBehaviour {
 
 	static private Pallete firstPallete = new Pallete(new Color(0.77f, 0.85f, 0.95f, 1f), new Color(0.93f, 0.78f, 0.73f, 1f), 
 		new Color(1f, 0.46f, 0.24f, 1f), new Color(0.16f, 0.56f, 1f, 1f));
-	static private Pallete secondPallete = new Pallete(new Color(0.2f, 0.2f, 0.2f, 1f), new Color(0.25f, 1f, 0.54f, 1f), 
-		new Color(1f, 0.4f, 0.4f, 1f), new Color(0.2f, 0.2f, 0.7f, 1f));
-	static private Pallete thirdPallete = new Pallete(new Color(1f, 1f, 1f, 1f), new Color(0.5f, 0.2f, 0.8f, 1f), 
-		new Color(1f, 0.4f, 1f, 1f), new Color(0.6f, 0.6f, 0.7f, 1f));
+	static private Pallete secondPallete = new Pallete(new Color(0.87f, 0.87f, 0.94f, 1f), new Color(0.39f, 0.37f, 0.57f, 1f), 
+		new Color(0.8f, 0.33f, 0.73f, 1f), new Color(0.32f, 0.72f, 0.87f, 1f));
+	static private Pallete thirdPallete = new Pallete(new Color(0.94f, 0.93f, 0.87f, 1f), new Color(0.5f, 0.7f, 0.5f, 1f), 
+		new Color(0.85f, 0.44f, 0.29f, 1f), new Color(0.87f, 0.8f, 0.35f, 1f));
 	static private Pallete greyPallete = new Pallete(new Color(0.8f, 0.8f, 0.8f, 1f), new Color(0.3f, 0.3f, 0.3f, 1f), 
 		new Color(1f, 0.4f, 0.4f, 0.4f), new Color(0.4f, 0.4f, 0.4f, 1f));
 	static private int currentPalleteNum = 1;
