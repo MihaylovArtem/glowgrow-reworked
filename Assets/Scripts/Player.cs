@@ -80,7 +80,7 @@ public class Player : MonoBehaviour {
 		outterLayerScript.colorType = catchedBullet.colorType;
 		outterLayerScript.neededScale = expectedSize;
 
-		outterLayer.transform.position = new Vector3 (0, 0, outterLayerStack.Count+1f/100.0f);
+		outterLayer.transform.position = new Vector3 (0, 0, (outterLayerStack.Count+1f)/100.0f);
 		outterLayer.transform.localScale = new Vector3 (previousSize, previousSize, outterLayer.transform.localScale.z);
 		glowObject.transform.localScale = new Vector2 (expectedGlowSize, expectedGlowSize);
 		outterLayerStack.Push(outterLayer);
