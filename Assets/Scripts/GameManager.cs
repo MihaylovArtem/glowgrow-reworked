@@ -25,10 +25,12 @@ public class GameManager : MonoBehaviour {
 	//TODO: заменить на нормальный BulletPatternManager
 	private BulletPatternManager patternManager;
 	public PalleteManager palleteManager;
+	public RequestManager requestManager;
 	public Text scoreText;
 	public Text superPowerText;
 	public Text levelText;
 	public Text highscoreText;
+	public InputField usernameField;
 	public int currentScore = 0;
 	private int bulletsForPower = 0;
 	private const int maxBulletsForPower = 10;
@@ -43,6 +45,14 @@ public class GameManager : MonoBehaviour {
 	private int highscore {
 		get {
 			var saved = PlayerPrefs.GetInt (highscorePrefsKey);
+			return saved;
+		}
+	}
+
+	private string usernamePrefsKey = "username";
+	private string username {
+		get {
+			var saved = PlayerPrefs.GetString (usernamePrefsKey);
 			return saved;
 		}
 	}
@@ -87,10 +97,17 @@ public class GameManager : MonoBehaviour {
 		Player.OnSuperPower += PerformSuperPower;
 		Player.OnSuperPowerBulletCatch += IncreaseScore;
 
+		usernameField.onValueChanged.AddListener (delegate {SaveUsername ();});
+		usernameField.text = username;
+
 		backgroundSprite.color = backgroundExpectedColor;
 		SetPanelBackgroundColorTo(panelBackgroundExpectedColor);
 
         Physics2D.gravity = new Vector3(1.0f, -1.0f, 0f);
+	}
+
+	void SaveUsername() {
+		PlayerPrefs.SetString (usernamePrefsKey, usernameField.text);
 	}
 
 	// Update is called once per frame
@@ -127,6 +144,8 @@ public class GameManager : MonoBehaviour {
 		gameState = GameState.GameOver;
 		if (highscore < currentScore) {
 			PlayerPrefs.SetInt ("current_highscore", currentScore);
+			requestManager.PostHighscoreWithUsername ();
+			requestManager.GetRequest ();
 		}
 		DestroyAllBullets ();
 	}
@@ -177,7 +196,7 @@ public class GameManager : MonoBehaviour {
 		}
 		menuPanel.transform.localScale = Vector3.Lerp (originalScale, targetScale, scaleTimer / scaleDuration);
 
-		highscoreText.text = "Highscore:\n" + highscore.ToString () + " points";
+		highscoreText.text = "My highscore:\n" + highscore.ToString () + " points";
 	}
 
 	void HandleCurrentColor() {
