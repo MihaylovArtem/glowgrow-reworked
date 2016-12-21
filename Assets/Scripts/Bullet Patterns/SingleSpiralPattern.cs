@@ -12,7 +12,6 @@ public class SingleSpiralPattern : BulletPattern {
 		var y = (float)(10.0f * Mathf.Sin((float)sentBulletAmount / (float)bulletAmount * (float)Mathf.PI * 2));
 		bulletScript.isSpiral = true;
 		bullet.transform.position = new Vector3(x, y);
-		//bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-x * 1f, 60f));
 	}
 
 	public override IEnumerator SpawnPattern(int bulletsAmount)

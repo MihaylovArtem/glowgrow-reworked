@@ -25,6 +25,10 @@ public class FallBulletPattern : BulletPattern
 		var blockAmount = Random.Range(2, 5);
 		for (var i = 0; i < blockAmount; i++)
 		{
+			if (GameManager.gameState != GameManager.GameState.Playing)
+			{
+				break;
+			}
 			for (var j = 0; j < bulletsAmount / blockAmount; j++)
 			{
 				if (GameManager.gameState != GameManager.GameState.Playing)
