@@ -29,7 +29,6 @@ public class BulletPatternManager : MonoBehaviour {
 	public void SpawnRandomPattern() {
 		if (GameManager.gameState == GameManager.GameState.Playing) {
 			int number = Random.Range(0,4);
-			number = 3;
 			switch (number) {
 			case 0:
 				StartCoroutine(linearBulletPattern.SpawnPattern (8));
