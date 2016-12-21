@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour {
 	public SpriteRenderer backgroundSprite;
 	public Image[] panelBackgroundSprites;
 
+    private Vector3 gravity;
+
 	private string highscorePrefsKey = "current_highscore";
 	private int highscore {
 		get {
@@ -87,10 +89,12 @@ public class GameManager : MonoBehaviour {
 
 		backgroundSprite.color = backgroundExpectedColor;
 		SetPanelBackgroundColorTo(panelBackgroundExpectedColor);
+
+        Physics2D.gravity = new Vector3(1.0f, -1.0f, 0f);
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		CheckInput ();
 		HandleCurrentColor ();
 	}

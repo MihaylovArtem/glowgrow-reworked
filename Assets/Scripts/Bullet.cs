@@ -9,6 +9,19 @@ public class Bullet : MonoBehaviour
 //    public <> bulletType;
 //    public <> speed;
 
+    public bool affectedByGravity = false;
+    public bool isSpiral = false;
+
+    public Vector3 playerPosition;
+
+    public Rigidbody2D bulletRigidbody;
+
+    public float bulletSpeed = 2.0f;
+    public float bulletCurve = 0.8f;
+    
+    float maxGravDist = 20.0f;
+    float maxGravity = 20.0f;
+
 	public GameObject particlesPrefab;
 
 	public ColorType colorType = ColorType.first;
@@ -51,6 +64,7 @@ public class Bullet : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+        playerPosition = GameObject.FindGameObjectsWithTag("Player")[0].transform.position;
         if (Random.Range(0, 20) == 7) {
             isBonus = true;
 			transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
@@ -59,11 +73,23 @@ public class Bullet : MonoBehaviour
         else {
             isBonus = false;
         }
-        Debug.Log(bulletScore.text);
+        bulletRigidbody = gameObject.GetComponent<Rigidbody2D>();
 	}
 
 	void Update() {
 		sprite.color = expectedColor;
+
+        if (isSpiral) {
+            bulletRigidbody.velocity = new Vector2(gameObject.transform.position.y * bulletSpeed, -gameObject.transform.position.x * bulletSpeed) - new Vector2(gameObject.transform.position.x, gameObject.transform.position.y).normalized * bulletCurve * bulletSpeed;
+        }
+
+        if (affectedByGravity) {
+            var dist = Vector3.Distance(playerPosition, transform.position);
+            if (dist <= maxGravDist) {
+                Vector3 v = playerPosition - transform.position;
+                bulletRigidbody.AddRelativeForce(v.normalized * ((1.0f - dist / maxGravDist) * maxGravity));
+            }
+        }
 	}
 
 	public void setColorType(ColorType type) {
