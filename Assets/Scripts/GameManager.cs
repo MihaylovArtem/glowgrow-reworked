@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void DecreaseScore() {
-		currentScore-=10;
+		currentScore-=5;
 		bulletsForPower = 0;
 	}
 
