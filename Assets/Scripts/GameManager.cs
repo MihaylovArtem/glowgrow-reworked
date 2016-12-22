@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour {
 	Vector3 originalScale = new Vector3(1,1,1);
 
 	public enum GameState {
-		Menu, Playing, Pause, GameOver
+		Menu, Playing, Pause, GameOver, Test
 	}
 
 	static public GameState gameState = GameState.Menu;
@@ -162,8 +162,9 @@ public class GameManager : MonoBehaviour {
 		originalScale = menuPanel.transform.localScale;
 
 		scaleTimer = 0.0f;
-		gameState = GameState.Playing;
+		gameState = GameState.Test;
 		patternManager = gameObject.GetComponent<BulletPatternManager>();
+
 
 		Invoke("startTestPattern", 1.0f);
 

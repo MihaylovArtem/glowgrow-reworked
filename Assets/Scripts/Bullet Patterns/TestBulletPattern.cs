@@ -59,6 +59,7 @@ public class TestBulletPattern : BulletPattern {
 		leftText.SetActive(true);
 		yield return new WaitForSeconds(0.7f);
 		leftText.SetActive(false);
+        GameManager.gameState = GameManager.GameState.Playing;
 	}
 
 }
