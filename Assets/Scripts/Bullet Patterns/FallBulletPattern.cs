@@ -45,6 +45,9 @@ public class FallBulletPattern : BulletPattern
 		{
 			for (var j = 0; j < bulletsAmount - sentBulletAmount; j++)
 			{
+                if (GameManager.gameState != GameManager.GameState.Playing) {
+                    break;
+                }
 				SpawnSingleBullet();
 				yield return new WaitForSeconds(0.3f);
 			}
