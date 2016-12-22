@@ -15,8 +15,8 @@ public class PalleteManager : MonoBehaviour {
 	static private int currentPalleteNum = 1;
 	static private int previousPalleteNum = 1;
 	static private float timer = 0.0f;
-	static private float easeInDuration = 2f;
-	static private float easeOutDuration = 1f;
+	static private float easeInDuration = 0.75f;
+	static private float easeOutDuration = 0.4f;
 
 	static public float colorChangeDuration {
 		get {
