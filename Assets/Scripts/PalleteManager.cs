@@ -11,6 +11,7 @@ public class PalleteManager : MonoBehaviour {
 		new Color(0.85f, 0.44f, 0.29f, 1f), new Color(0.87f, 0.8f, 0.35f, 1f));
 	static private Pallete greyPallete = new Pallete(new Color(0.8f, 0.8f, 0.8f, 1f), new Color(0.3f, 0.3f, 0.3f, 1f), 
 		new Color(1f, 0.4f, 0.4f, 0.4f), new Color(0.4f, 0.4f, 0.4f, 1f));
+	
 	static private int currentPalleteNum = 1;
 	static private int previousPalleteNum = 1;
 	static private float timer = 0.0f;
